@@ -1,6 +1,5 @@
 require('dotenv').config();
-
-// async errors
+require('express-async-errors'); // pkg to set up error handling instead of try / catch MW, just need to require in app.js to use
 
 const express = require('express');
 
@@ -11,6 +10,7 @@ const connectDB = require('./db/connect')
 
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
+const productsRouter = require('./routes/products');
 
 // middleware 
 app.use(express.json()); // allows us to receive JSON from req.body
@@ -24,9 +24,11 @@ app.get('/', (req, res) => {
 
 // products route
 
+app.use('/api/v1/products', productsRouter)
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
+
 
 const start = async () => {
     try {
